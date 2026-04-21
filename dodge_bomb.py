@@ -5,7 +5,8 @@ import random
 import time
 import math
 
-WIDTH, HEIGHT = 1100, 650
+WIDTH :int =1100
+HEIGHT :int = 650
 img03 = pg.image.load("ex2/fig/3.png")
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -76,7 +77,7 @@ def calc_orientation(org: pg.Rect, dst: pg.Rect, current_xy: tuple[float, float]
     ox, oy = org.center
     dx, dy = dst.center
 
-    # 差ベクトル
+    # ベクトル
     vx = dx - ox
     vy = dy - oy
 
