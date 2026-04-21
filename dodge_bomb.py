@@ -147,9 +147,7 @@ def main():
         yoko = bound[0]
         tate = bound[1]
 
-        if yoko == False:
-            kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
-        if tate == False:
+        if not yoko or not tate:
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
 
         bb_img = bb_imgs[min(tmr // 500, 9)]
