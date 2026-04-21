@@ -3,6 +3,7 @@ import sys
 import pygame as pg
 import random
 import time
+import math
 
 WIDTH, HEIGHT = 1100, 650
 img03 = pg.image.load("ex2/fig/3.png")
@@ -71,6 +72,27 @@ def get_kk_imgs() -> dict[tuple[int, int], pg.Surface]:
     }
     return kk_imgs
 
+def calc_orientation(org: pg.Rect, dst: pg.Rect, current_xy: tuple[float, float]) -> tuple[float, float]:
+    ox, oy = org.center
+    dx, dy = dst.center
+
+    # 差ベクトル
+    vx = dx - ox
+    vy = dy - oy
+
+    # ノルム
+    norm = (vx**2 + vy**2) * math.sqrt(1/2)
+
+    if norm < 300:
+        return current_xy
+
+    # 正規化
+    if norm != 0:
+        vx = vx / norm * math.sqrt(50)
+        vy = vy / norm * math.sqrt(50)
+
+    return vx, vy
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -135,9 +157,15 @@ def main():
         bb_rct = bb_img.get_rect()
         bb_rct.center = old_center
 
-        avx = vx * bb_accs[min(tmr // 500, 9)]
-        avy = vy * bb_accs[min(tmr // 500, 9)]
+        # 追従ベクトルを計算
+        vx, vy = calc_orientation(bb_rct, kk_rct, (vx, vy))
+
+        acc = bb_accs[min(tmr // 500, 9)]
+        avx = vx * acc
+        avy = vy * acc
+
         bb_rct.move_ip(avx, avy)
+
 
         bound = check_bound(bb_rct)
         bb_yoko = bound[0]
