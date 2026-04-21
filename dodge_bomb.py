@@ -7,6 +7,17 @@ import random
 WIDTH, HEIGHT = 1100, 650
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+def check_bound(rct):
+    if 0 <= rct.left and rct.right <= WIDTH:
+        yoko = True 
+    else:
+        yoko = False
+
+    if 0 <= rct.top and rct.bottom <= HEIGHT:
+        tate = True 
+    else:
+        tate = False
+    return yoko, tate
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -22,9 +33,12 @@ def main():
     bb_rct.center = (random.randint(0, WIDTH), random.randint(0, HEIGHT))
     vx = +5
     vy = +5
+
     
+
     clock = pg.time.Clock()
     tmr = 0
+    
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
@@ -48,7 +62,25 @@ def main():
 
         kk_rct.move_ip(sum_mv)
 
+        bound = check_bound(kk_rct)
+        yoko = bound[0]
+        tate = bound[1]
+
+        if yoko == False:
+            kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
+        if tate == False:
+            kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
+
         bb_rct.move_ip(vx, vy)
+
+        bound = check_bound(bb_rct)
+        bb_yoko = bound[0]
+        bb_tate = bound[1]
+
+        if bb_yoko == False:
+            vx *= -1
+        if bb_tate == False:
+            vy *= -1
 
         screen.blit(kk_img, kk_rct)
         screen.blit(bb_img, bb_rct)
