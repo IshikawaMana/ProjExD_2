@@ -77,12 +77,11 @@ def calc_orientation(org: pg.Rect, dst: pg.Rect, current_xy: tuple[float, float]
     ox, oy = org.center
     dx, dy = dst.center
 
-    # ベクトル
     vx = dx - ox
     vy = dy - oy
 
     # ノルム
-    norm = (vx**2 + vy**2) * math.sqrt(1/2)
+    norm = math.sqrt(vx**2 + vy**2)
 
     if norm < 300:
         return current_xy
